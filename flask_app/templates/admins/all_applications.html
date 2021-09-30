@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css' rel='stylesheet'
+        integrity='sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x' crossorigin='anonymous'>
+    <title>All Applications</title>
+</head>
+<body>
+    <div class="container p-4">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark d-flex justify-content-between mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand ml-2" style="color: white; font-weight: bold" href="/admins/dashboard">Adopt a Cat</a>
+                <!-- <ul class="navbar-nav me-auto mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admins/dashboard">Dashboard</a>
+                    </li>
+                </ul> -->
+            </div>
+            <a class="nav-link active" style="color: white" href="/admins/logout">Logout</a>
+            <a class="nav-link active" style="color: white">{{ admin.first_name }}</a>
+        </nav>
+
+        {% if all_applications == [] %}
+            <h3 class="text-center" style="color: red">Oops, there is no application</h5>
+            <img class="rounded mx-auto d-block" src="../../static/img/oops.png" alt="Error Image" style="width: 350px; height: 300px">
+        {% else %}
+            <table class="table">
+                <thead>
+                    <tr class="text-center">
+                        <th>Applicant Name</th>
+                        <th>Cat Name</th>
+                        <th>Cat Age</th>
+                        <th>Cat Breed</th>
+                        <th>Dog Num at home</th>
+                        <th>Cat Num at home</th>
+                        <th>Child Num at home</th>
+                        <th>Submitted at</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <h3>All Applications Info</h3>
+                    {% for application in all_applications %}
+                        <tr class="text-center">
+                            <th>{{ application.user.first_name }} {{ application.user.last_name }}</th>
+                            <th>{{ application.cat.name }}</th>
+                            <th>{{ application.cat.age }}</th>
+                            <th>{{ application.cat.breed }}</th>
+                            <th>{{ application.dog_num }}</th>
+                            <th>{{ application.cat_num }}</th>
+                            <th>{{ application.child_num }}</th>
+                            <th>{{ application.updated_at }}</th>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+</body>
+</html>

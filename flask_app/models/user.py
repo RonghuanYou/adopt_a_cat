@@ -2,15 +2,13 @@ from flask_app.config.mysqlconnection import connectToMySQL
 from flask_app import app
 from flask import flash
 from flask_bcrypt import Bcrypt
+# from flask_app.models import cat
 import re
 
-# from flask_app.models import recipe
 bcrypt = Bcrypt(app)
 
-
 class User:
-    schema = "belt_exam"
-
+    schema = "adopt_a_cat"
     def __init__(self, data):
         self.id = data['id']
         self.first_name = data['first_name']
@@ -19,19 +17,19 @@ class User:
         self.password = data['password']
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
-        # self.recipes = []
+        self.applications = []
 
     @classmethod
     def create(cls, data):
         query = """
-            INSERT INTO users(first_name, last_name, email, password)
+            INSERT INTO user_accounts(first_name, last_name, email, password)
             VALUES (%(first_name)s, %(last_name)s, %(email)s, %(password)s);
         """
         return connectToMySQL(cls.schema).query_db(query, data)
 
     @classmethod
     def get_all(cls):
-        query = "SELECT * FROM users;"
+        query = "SELECT * FROM user_accounts;"
         results = connectToMySQL(cls.schema).query_db(query)
 
         all_users = []
@@ -39,38 +37,25 @@ class User:
             all_users.append(cls(row))
         return all_users
 
-
-    # @classmethod
-    # def get_one(cls, data):
-    #     query = """
-    #         SELECT * FROM users LEFT JOIN recipes ON users.id = recipes.user_id
-    #         WHERE users.id = %(id)s;
-    #     """
-    #     results = connectToMySQL(cls.schema).query_db(query, data)
-    #     user = cls(results[0])
-    #     if results[0]['recipes.id'] != None:
-    #         for row in results:
-    #             row_data = {
-    #                 **row,
-    #                 "id": row["recipes.id"],
-    #                 "created_at": row['recipes.created_at'],
-    #                 "updated_at": row['recipes.updated_at'],
-    #                 "user_id": False
-    #             }
-    #             user.recipes.append(recipe.Recipe(row_data))
-    #     return user
-
+    @classmethod
+    def get_one(cls, data):
+        query = "SELECT * FROM user_accounts WHERE id = %(id)s;"
+        results = connectToMySQL(cls.schema).query_db(query, data)
+        if len(results) < 1:
+            return False
+        return cls(results[0])
 
     @classmethod
     def get_by_email(cls, data):
-        query = "SELECT * FROM users WHERE email = %(email)s;"
+        query = "SELECT * FROM user_accounts WHERE email = %(email)s;"
         results = connectToMySQL(cls.schema).query_db(query, data)
 
         if len(results) < 1:
             return False
         return cls(results[0])
 
-    
+
+
     @staticmethod
     def register_validate(post_data):
         is_valid = True
@@ -120,3 +105,5 @@ class User:
             return False
 
         return True
+
+
