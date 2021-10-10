@@ -41,7 +41,7 @@ def user_dashboard():
 @app.route("/users/application/<int:cat_id>")
 def display_application(cat_id):
     if session['uuid'] is None:
-        flash("Only logged user can adopt cats")
+        flash("Only registered user can adopt cats")
         return redirect('/')
         
     return render_template(

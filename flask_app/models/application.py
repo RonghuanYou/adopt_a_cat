@@ -3,7 +3,6 @@ from flask_app.models import cat
 from flask_app.models import user
 from flask import flash
 
-
 class Application:
     schema = "adopt_a_cat"
 
